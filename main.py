@@ -1,6 +1,5 @@
 import streamlit as st
-import backend as b
-
+from backend import formar_prompt
 st.set_page_config(page_title="CourseRecommender AI", layout="centered")
 
 st.title("Descubra cursos ideais para você")
@@ -18,7 +17,7 @@ with st.form(key="infos", clear_on_submit=True, enter_to_submit=False):
     submitted = st.form_submit_button("Submit")
 
 if submitted:
-    cursos = b.formar_prompt(area, nivel)
+    cursos = formar_prompt(area, nivel)
 
     st.write(f'Cursos de {area.title()} para nivel {nivel}')
 
