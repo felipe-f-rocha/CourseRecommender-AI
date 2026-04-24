@@ -50,7 +50,7 @@ GEMINI_MODEL=your_model
 ## Uso
 Execute a interface web:
 ```powershell
-streamlit run main.py
+streamlit run app.py
 ```
 Ou apenas o backend (para integração com outras aplicações):
 ```powershell
@@ -62,8 +62,8 @@ python backend.py
 - A interface coleta área e nível do usuário, chama o backend e exibe recomendações.
 - Exemplo de chamada direta (Python):
 ```python
-import backend as b
-cursos = b.formar_prompt('Data Science', 5)
+from backend import formar_prompt
+cursos = formar_prompt('Data Science', 5)
 print(cursos)
 ```
 - Cada curso recomendado inclui: Nome, Plataforma, Link validado e um breve texto.

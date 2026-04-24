@@ -10,7 +10,7 @@ import streamlit as st
 
 if __name__ == "__main__":
         raise ValueError('''O arquivo errado foi iniciado.
-        Para rodar o programa digite o terminal 'streamlit run main.py' ''')
+        Para rodar o programa digite o terminal 'streamlit run app.py' ''')
 
 # Cria User-Agent para requests de validação
 headers = {

@@ -1,5 +1,6 @@
 import streamlit as st
 from backend import formar_prompt
+
 st.set_page_config(page_title="CourseRecommender AI", layout="centered")
 
 st.title("Descubra cursos ideais para você")
