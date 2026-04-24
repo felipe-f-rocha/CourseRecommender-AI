@@ -1,0 +1,5 @@
+# no-cache-dir
+google-genai==1.73.1
+python-dotenv==1.2.2
+streamlit==1.56.0
+requests==2.33.1
