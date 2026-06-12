@@ -1,5 +1,8 @@
 import google.genai.errors
 import streamlit as st
+from google.genai import errors
+from google.genai.errors import APIError
+
 from backend import make_prompt
 
 st.set_page_config(page_title="CourseRecommender AI", layout="centered")
@@ -20,10 +23,14 @@ with st.form(key="infos", clear_on_submit=True, enter_to_submit=False):
 if submitted:
     try:
         cursos = make_prompt(area, nivel)
-    except google.genai.errors.ClientError as exc:
-        st.error('Ouve um erro na procura dos cursos. Tente novamente mais tarde')
-    except NameError as exc:
-        st.error('Insira um área de estudo')
+    except errors.APIError as e:
+        if e.code == 403:
+            st.error('Verifique se a chave de API está definida e tem o acesso correto.')
+        elif e.code == 500:
+            st.error('Ocorre um erro inesperado.')
+        elif e.code == 503:
+            st.error('O serviço pode estar temporariamente sobrecarregado.')
+
     else:
         st.write(f'Cursos de {area.title()} para nivel {nivel}')
         for curso in cursos:
