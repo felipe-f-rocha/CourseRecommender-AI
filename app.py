@@ -1,9 +1,7 @@
-import google.genai.errors
 import streamlit as st
 from google.genai import errors
-from google.genai.errors import APIError
 
-from backend import make_prompt
+from backend.backend import make_prompt
 
 st.set_page_config(page_title="CourseRecommender AI", layout="centered")
 

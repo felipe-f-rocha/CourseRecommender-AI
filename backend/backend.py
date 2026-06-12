@@ -1,9 +1,6 @@
 from concurrent.futures.thread import ThreadPoolExecutor
-
-import google.genai.errors
 from google import genai
 import tomllib
-from google.api_core.exceptions import ClientError
 from google.genai import types
 import requests
 import streamlit as st
@@ -22,7 +19,7 @@ headers = {
 
 # Load the API key and AI Model from secrets
 
-with open('secrets.toml', 'rb') as f:
+with open('../secrets.toml', 'rb') as f:
     config = tomllib.load(f)
 
 try:
