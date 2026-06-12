@@ -1,10 +1,10 @@
+import google.genai.errors
 import streamlit as st
-from backend import formar_prompt
+from backend import make_prompt
 
 st.set_page_config(page_title="CourseRecommender AI", layout="centered")
 
 st.title("Descubra cursos ideais para você")
-
 
 with st.form(key="infos", clear_on_submit=True, enter_to_submit=False):
     st.write("Preencha as informações")
@@ -18,15 +18,19 @@ with st.form(key="infos", clear_on_submit=True, enter_to_submit=False):
     submitted = st.form_submit_button("Submit")
 
 if submitted:
-    cursos = formar_prompt(area, nivel)
-
-    st.write(f'Cursos de {area.title()} para nivel {nivel}')
-
-    for curso in cursos:
-        container = st.container(border=True, horizontal=True, width=700)
-        container.text(curso['Nome do Curso'])
-        container.badge(curso['Plataforma'], color="green")
-        container.text(curso['Por que é ideal'],text_alignment="left")
-        container.caption('É gratuito?\n',text_alignment="left")
-        container.caption(curso['É gratuito'],text_alignment="left")
-        container.link_button("Começar agora", f"{curso['Link']}", type="primary")
+    try:
+        cursos = make_prompt(area, nivel)
+    except google.genai.errors.ClientError as exc:
+        st.error('Ouve um erro na procura dos cursos. Tente novamente mais tarde')
+    except NameError as exc:
+        st.error('Insira um área de estudo')
+    else:
+        st.write(f'Cursos de {area.title()} para nivel {nivel}')
+        for curso in cursos:
+            container = st.container(border=True, horizontal=True, width=700)
+            container.text(curso['Nome do Curso'])
+            container.badge(curso['Plataforma'], color="green")
+            container.text(curso['Por que é ideal'], text_alignment="left")
+            container.caption('É gratuito?\n', text_alignment="left")
+            container.caption(curso['É gratuito'], text_alignment="left")
+            container.link_button("Começar agora", f"{curso['Link']}", type="primary")

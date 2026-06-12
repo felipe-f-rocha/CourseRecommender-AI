@@ -41,10 +41,12 @@ git clone <url-do-repositorio>
 ```powershell
 pip install -r requirements.txt
 ```
-3. Crie um arquivo `.env` com sua chave da API Gemini:
+3. Crie um arquivo `secrets.toml` com sua chave da API Gemini:
 ```
-GEMINI_API_KEY=your_key
-GEMINI_MODEL=your_model
+[GEMINI]
+
+GEMINI_API_KEY="your_api_key"
+GEMINI_MODEL="gemini_model"
 ```
 
 ## Uso
@@ -62,8 +64,8 @@ python backend.py
 - A interface coleta área e nível do usuário, chama o backend e exibe recomendações.
 - Exemplo de chamada direta (Python):
 ```python
-from backend import formar_prompt
-cursos = formar_prompt('Data Science', 5)
+from backend import make_prompt
+cursos = make_prompt('Data Science', 5)
 print(cursos)
 ```
 - Cada curso recomendado inclui: Nome, Plataforma, Link validado e um breve texto.

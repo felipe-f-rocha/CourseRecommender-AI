@@ -1,32 +1,36 @@
-import os
 from concurrent.futures.thread import ThreadPoolExecutor
+
+import google.genai.errors
 from google import genai
-from dotenv import load_dotenv
+import tomllib
+from google.api_core.exceptions import ClientError
 from google.genai import types
 import requests
 import streamlit as st
 
-# Verifica se o arquivo correto foi iniciado
+
+# Verify if the right file had been initiated
 
 if __name__ == "__main__":
         raise ValueError('''O arquivo errado foi iniciado.
-        Para rodar o programa digite o terminal 'streamlit run app.py' ''')
+        Para rodar o programa digite no terminal 'streamlit run app.py' ''')
 
-# Cria User-Agent para requests de validação
+# Create User Agent for requests
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/125.0.0.0 Safari/537.36 CursoRecommender/1.0"
 }
 
-# Traz a API_KEY de .env e a carrega
+# Load the API key and AI Model from secrets
 
-load_dotenv()
+with open('secrets.toml', 'rb') as f:
+    config = tomllib.load(f)
 
 try:
+    api_key = config ["GEMINI"]["GEMINI_API_KEY"]
+    model = config["GEMINI"]["GEMINI_MODEL"]
+except KeyError:
     api_key = st.secrets["GEMINI_API_KEY"]
     model = st.secrets["GEMINI_MODEL"]
-except:
-    api_key = os.getenv("GEMINI_API_KEY")
-    model = os.getenv("GEMINI_MODEL")
 
 if not api_key:
     raise ValueError("Erro: Chave de API não encontrada")
@@ -42,7 +46,7 @@ grounding_tool = types.Tool(
     google_search=types.GoogleSearch()
 )
 
-def formar_prompt(area, nivel):
+def make_prompt(area, nivel):
     # Formação do Prompt base da IA
 
     prompt = (f'''Busque cursos para mim seguindo as seguintes informações:
@@ -67,38 +71,35 @@ def formar_prompt(area, nivel):
             - Máximo 5 cursos
             - Seja direto
             - Para cada curso, indique claramente se ele é gratuito e COMO acessar gratuitamente (ex: audit, free tier).
-             Se não for possível, não inclua.
+             Se não for possível, não inclua. Dê preferência para cursos com financial aid ou certificado gratis
             ''')
 
-    return buscar_cursos(prompt)
+    return search_courses(prompt, model)
 
-
-def buscar_cursos(prompt):
+def search_courses(prompt, model):
     # Definição de modelo e instrução do modelo
-
-    cursos = client.models.generate_content(
-        model=model,
-        contents= prompt,
-        config= types.GenerateContentConfig(
-            system_instruction="""
-                Você é um especialista em educação.
-
-                REGRAS CRÍTICAS:
-                - Nunca invente cursos
-                - Nunca invente links
-                - Se não tiver certeza, não responda
-                - Sempre forneça link direto válido
-                - Respostas curtas e organizadas
-                """,
-            tools = [grounding_tool],
-            temperature=0.3,
+        cursos = client.models.generate_content(
+            model=model,
+            contents= prompt,
+            config= types.GenerateContentConfig(
+                system_instruction="""
+                    Você é um especialista em educação.
+    
+                    REGRAS CRÍTICAS:
+                    - Nunca invente cursos
+                    - Nunca invente links
+                    - Se não tiver certeza, não responda
+                    - Sempre forneça link direto válido
+                    - Respostas curtas e organizadas
+                    """,
+                tools = [grounding_tool],
+                temperature=0.3,
+                )
             )
-        )
-    return formatar(cursos)
 
+        return formatter(cursos)
 
-
-def formatar(cursos):
+def formatter(cursos):
 
     # Remove caracteres desnecesários e quebra o retorno em linhas
 
@@ -146,12 +147,12 @@ def formatar(cursos):
     # Trabalha simultaneamente em multiplas requests de validação
 
     with ThreadPoolExecutor(max_workers = 5) as pool:
-        cursos_finais = list(pool.map(validacao_de_url, cursos_finais))
+        cursos_finais = list(pool.map(url_validation, cursos_finais))
 
     return cursos_finais
 
 
-def validacao_de_url(curso):
+def url_validation(curso):
     # Valida as URLs e as substitui caso não sejam encontradas
 
     try:
