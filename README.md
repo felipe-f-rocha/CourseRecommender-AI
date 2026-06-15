@@ -4,86 +4,129 @@
 ![Streamlit](https://img.shields.io/badge/Streamlit-App-red)
 ![AI](https://img.shields.io/badge/AI-Gemini-green)
 
-> Descubra cursos ideais com inteligência artificial, validação automática de links e interface web moderna.
+> Sistema inteligente de recomendação de cursos usando IA generativa, validação automática de links e arquitetura modular.
 
-## Oque é e qual o príncipio do projeto?
+---
 
-> Encontrar cursos de qualidade na internet não é difícil, difícil é separar o que realmente vale a pena do que é repetitivo, desatualizado ou simplesmente não funciona.
+## Visão Geral
 
-O **CourseRecommender AI** foi criado para resolver exatamente esse problema.
+O CourseRecommender AI resolve o problema de encontrar cursos confiáveis na internet.
 
-A partir de uma área de interesse e nível do usuário, o sistema utiliza **IA generativa (Google Gemini)** para identificar
-cursos relevantes, validar automaticamente os links e garantir que o usuário tenha acesso a opções reais, acessíveis e utilizáveis,
-sem perder tempo com páginas quebradas ou recomendações genéricas.
+Ele usa IA (Google Gemini) para gerar recomendações personalizadas e valida automaticamente os links.
 
-O projeto surgiu da necessidade prática de filtrar conteúdo educacional confiável em meio a um volume massivo de opções
-inconsistentes na internet, transformando uma busca manual e incerta em uma experiência rápida, inteligente e orientada.
+---
 
-## ⚡ Como funciona
-1. **IA Generativa**: Gera recomendações de cursos personalizadas conforme área e nível do usuário (Google Gemini).
-2. **Validação Automática**: Todos os links são testados em paralelo para garantir que funcionam.
-3. **Fallback Inteligente**: Se um link estiver quebrado, o sistema sugere automaticamente uma busca alternativa no Google.
+## Como Funciona
 
-## Tecnologias Utilizadas
-- **Python 3.11+**
-- **Google Generative AI (Gemini)**
-- **Streamlit** (interface web)
-- **Requests** (validação de links)
-- **python-dotenv** (gestão de variáveis de ambiente)
-- **ThreadPoolExecutor** (concorrência para validação)
+Fluxo do sistema:
 
-## Instalação
-1. Clone este repositório:
-```powershell
-git clone <url-do-repositorio>
-```
-2. Instale as dependências:
-```powershell
-pip install -r requirements.txt
-```
-3. Crie um arquivo `secrets.toml` com sua chave da API Gemini:
-```
-[GEMINI]
+````
+Streamlit (UI)  
+↓  
+Service Layer (orquestração)  
+↓  
+Domain Layer (regras e validação)  
+↓  
+Infrastructure Layer (Gemini + requests)  
+↓  
+Resposta formatada e exibida  
 
-GEMINI_API_KEY="your_api_key"
-GEMINI_MODEL="gemini_model"
-```
+````
 
-## Uso
-Execute a interface web:
-```powershell
-streamlit run main.py
-```
-Ou apenas o backend (para integração com outras aplicações):
-```powershell
-python backend.py
-```
 
-## API e Fluxo de Uso
-- O backend expõe funções para recomendação de cursos via IA.
-- A interface coleta área e nível do usuário, chama o backend e exibe recomendações.
-```
-UI (Streamlit)
-   ↓
-Service (caso de uso)
-   ↓
-Domain (prompt, parsing, regras)
-   ↓
-Infrastructure (Gemini, requests)
-```
-- Cada curso recomendado inclui: Nome, Plataforma, Link validado e um breve texto.
+---
 
-## Diferenciais
-- Recomendações reais, com links validados automaticamente.
-- Uso de IA generativa para personalização.
-- Interface web amigável e pronta para deploy.
-- Fácil integração com outros sistemas Python.
+## Arquitetura
 
-## Estrutura do Projeto
-- `backend.py`: Lógica principal, integração com IA e validação de links.
-- `interface.py`: Interface web (Streamlit).
-- `requirements.txt`: Dependências do projeto.
+### UI (Streamlit)
+- Entrada de dados
+  - Exibição de resultados
+  - Exibição de erros
 
-## Licença
+### Service Layer
+- Orquestra todo o fluxo
+  - Controla fallback
+  - Gerencia chamadas de IA
+  - Coordena validação e parsing
+
+### Domain Layer
+- Regras de validação
+  - Estrutura de dados (Curso)
+  - Parsing da resposta da IA
+
+### Infrastructure Layer
+- Integração com Gemini API
+  - Requisições HTTP
+  - Validação de URLs
+
+### Config
+- Chaves de API
+  - Modelos Gemini
+  - Fallback settings
+
+---
+
+## Funcionalidades
+
+````
+- Validação automática de links
+- Sistema de fallback de modelo
+- Validação paralela de URLs
+- Arquitetura modular
+````
+
+
+---
+
+## 🛡 Tratamento de Erros
+
+### Infraestrutura
+- 429 → ativa fallback
+  - 5xx → retry/fallback
+  - 403 → erro de configuração
+
+### UI
+- Mostra erros amigáveis
+  - Não decide lógica de recuperação
+
+### Service
+- Decide fallback
+  - Controla retry
+  - Propaga erros tratados
+
+---
+
+## Fallback
+
+### Link
+Se o link estiver quebrado, substitui por busca no Google.
+
+---
+
+## Tecnologias
+
+- Python 3.11+
+  - Google Gemini API
+  - Streamlit
+  - Requests
+  - python-dotenv
+  - ThreadPoolExecutor
+
+---
+
+# Estrutura do Projeto
+
+    config/
+    infra/
+    domain/
+    service/
+    ui/
+    
+    main.py
+    requirements.txt
+    README.md
+
+---
+# Licença
+
 MIT License
-
