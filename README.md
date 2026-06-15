@@ -52,7 +52,7 @@ GEMINI_MODEL="gemini_model"
 ## Uso
 Execute a interface web:
 ```powershell
-streamlit run app.py
+streamlit run main.py
 ```
 Ou apenas o backend (para integração com outras aplicações):
 ```powershell
@@ -62,11 +62,14 @@ python backend.py
 ## API e Fluxo de Uso
 - O backend expõe funções para recomendação de cursos via IA.
 - A interface coleta área e nível do usuário, chama o backend e exibe recomendações.
-- Exemplo de chamada direta (Python):
-```python
-from backend import make_prompt
-cursos = make_prompt('Data Science', 5)
-print(cursos)
+```
+UI (Streamlit)
+   ↓
+Service (caso de uso)
+   ↓
+Domain (prompt, parsing, regras)
+   ↓
+Infrastructure (Gemini, requests)
 ```
 - Cada curso recomendado inclui: Nome, Plataforma, Link validado e um breve texto.
 

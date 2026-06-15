@@ -1,7 +1,6 @@
 import streamlit as st
 from google.genai import errors
-
-from backend.backend import make_prompt
+from services import recommendation_service
 
 st.set_page_config(page_title="CourseRecommender AI", layout="centered")
 
@@ -13,14 +12,14 @@ with st.form(key="infos", clear_on_submit=True, enter_to_submit=False):
     # Input das informações
 
     area = st.text_input("Área de interesse: ", placeholder='Digite sua área de interesse')
-    nivel = st.number_input(label='Digite o seu nível de 0 a 10: ', min_value=0, max_value=10)
+    level = st.number_input(label='Digite o seu nível de 0 a 10: ', min_value=0, max_value=10)
 
     # Every form must have a submit button.
     submitted = st.form_submit_button("Submit")
 
 if submitted:
     try:
-        cursos = make_prompt(area, nivel)
+        cursos = recommendation_service.recommend(area, level)
     except errors.APIError as e:
         if e.code == 403:
             st.error('Verifique se a chave de API está definida e tem o acesso correto.')
@@ -28,9 +27,10 @@ if submitted:
             st.error('Ocorre um erro inesperado.')
         elif e.code == 503:
             st.error('O serviço pode estar temporariamente sobrecarregado.')
-
+        else:
+            print(e)
     else:
-        st.write(f'Cursos de {area.title()} para nivel {nivel}')
+        st.write(f'Cursos de {area.title()} para nivel {level}')
         for curso in cursos:
             container = st.container(border=True, horizontal=True, width=700)
             container.text(curso['Nome do Curso'])
