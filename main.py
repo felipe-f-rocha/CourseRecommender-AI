@@ -1,6 +1,7 @@
 import streamlit as st
 from google.genai import errors
 from services import recommendation_service
+from domain.exceptions import ValueNotFound
 
 st.set_page_config(page_title="CourseRecommender AI", layout="centered")
 
@@ -28,7 +29,10 @@ if submitted:
         elif e.code == 503:
             st.error('O serviço pode estar temporariamente sobrecarregado.')
         else:
-            print(e)
+            st.error('Houve um erro inesperado. Tente novamente mais tarde.')
+    except ValueNotFound:
+        st.error('O campo de área não pode estar vazio.')
+
     else:
         st.write(f'Cursos de {area.title()} para nivel {level}')
         for curso in cursos:
