@@ -3,7 +3,6 @@ from google.genai import types
 
 def search_courses(prompt, api_key, model):
     # Definição de modelo e instrução do modelo
-    print(api_key)
 
     client = genai.Client(api_key=api_key)
 

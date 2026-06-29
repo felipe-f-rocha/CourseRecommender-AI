@@ -1,6 +1,8 @@
 from infrastructure import gemini_client, validator, parser, prompt_builder
 from domain import exceptions, input_validator
 from config import secrets
+from google.genai import errors
+from time import sleep
 
 
 def recommend(area, level):
@@ -10,11 +12,18 @@ def recommend(area, level):
     if area is None:
         raise exceptions.ValueNotFound
 
-    api_key, model = secrets.get_secrets()
+    api_key, model, fallback_model = secrets.get_secrets()
 
     prompt = prompt_builder.make_prompt(area, level)
 
-    response = gemini_client.search_courses(prompt, api_key, model)
+    response = None
+
+    try:
+        response = gemini_client.search_courses(prompt, api_key, model)
+    except errors.APIError as e:
+        if e.code == 429:
+            sleep(2)
+            response = gemini_client.search_courses(prompt,api_key,fallback_model)
 
     unvalidated_courses = parser.parse_cursos(response)
 

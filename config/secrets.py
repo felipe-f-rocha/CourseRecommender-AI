@@ -10,6 +10,7 @@ class ConfigurationError(Exception):
 def get_secrets():
     api_key = None
     model = None
+    fallback_model = None
 
     # 1. tenta arquivo local
     try:
@@ -21,6 +22,7 @@ def get_secrets():
 
         api_key = config["GEMINI"]["GEMINI_API_KEY"]
         model = config["GEMINI"]["GEMINI_MODEL"]
+        fallback_model = config["GEMINI"]["FALLBACK_MODEL"]
 
     except (FileNotFoundError, KeyError):
         pass  # fallback será usado
@@ -30,6 +32,7 @@ def get_secrets():
         try:
             api_key = st.secrets["GEMINI"]["GEMINI_API_KEY"]
             model = st.secrets["GEMINI"]["GEMINI_MODEL"]
+            fallback_model = config["GEMINI"]["FALLBACK_MODEL"]
         except Exception:
             pass
 
@@ -40,4 +43,7 @@ def get_secrets():
     if not model:
         raise ConfigurationError("GEMINI_MODEL não configurado")
 
-    return api_key, model
+    if not fallback_model:
+        raise ConfigurationError("FALLBACK_MODEL não configurado")
+
+    return api_key, model, fallback_model
