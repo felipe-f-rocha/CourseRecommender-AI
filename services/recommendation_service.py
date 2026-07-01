@@ -1,5 +1,8 @@
+from urllib3.contrib.emscripten import response
+
 from infrastructure import gemini_client, validator, parser, prompt_builder
-from domain import exceptions, input_validator
+from domain import exceptions
+from services import input_validator
 from config import secrets
 from google.genai import errors
 from time import sleep
@@ -7,23 +10,23 @@ from time import sleep
 
 def recommend(area, level):
 
-    area = input_validator.input_validation(area)
-
-    if area is None:
-        raise exceptions.ValueNotFound
+    area = input_validator.validate(area)
 
     api_key, model, fallback_model = secrets.get_secrets()
 
     prompt = prompt_builder.make_prompt(area, level)
 
-    response = None
+    main_client = gemini_client.GeminiClient(api_key, model)
+    fallback_client =gemini_client.GeminiClient(api_key, fallback_model)
 
     try:
-        response = gemini_client.search_courses(prompt, api_key, model)
+        response = main_client.search_courses(prompt)
     except errors.APIError as e:
         if e.code == 429:
             sleep(2)
-            response = gemini_client.search_courses(prompt,api_key,fallback_model)
+            response = fallback_client.search_courses(prompt)
+        else:
+            raise
 
     unvalidated_courses = parser.parse_cursos(response)
 

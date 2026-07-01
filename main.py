@@ -1,8 +1,6 @@
 import streamlit as st
-from google.genai import errors
 from services import recommendation_service
-from domain.exceptions import ValueNotFound
-
+from presentation import error_handler
 st.set_page_config(page_title="CourseRecommender AI", layout="centered")
 
 st.title("Descubra cursos ideais para você")
@@ -21,17 +19,10 @@ with st.form(key="infos", clear_on_submit=True, enter_to_submit=False):
 if submitted:
     try:
         cursos = recommendation_service.recommend(area, level)
-    except errors.APIError as e:
-        if e.code == 403:
-            st.error('Verifique se a chave de API está definida e tem o acesso correto.')
-        elif e.code == 500:
-            st.error('Ocorre um erro inesperado.')
-        elif e.code == 503:
-            st.error('O serviço pode estar temporariamente sobrecarregado.')
-        else:
-            st.error('Houve um erro inesperado. Tente novamente mais tarde.')
-    except ValueNotFound:
-        st.error('O campo de área não pode estar vazio.')
+    except Exception as e:
+        mensagem = error_handler.get_message(e)
+        st.error(mensagem)
+
 
     else:
         st.write(f'Cursos de {area.title()} para nivel {level}')
