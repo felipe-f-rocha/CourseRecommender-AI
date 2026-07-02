@@ -32,7 +32,7 @@ def get_secrets():
         try:
             api_key = st.secrets["GEMINI"]["GEMINI_API_KEY"]
             model = st.secrets["GEMINI"]["GEMINI_MODEL"]
-            fallback_model = config["GEMINI"]["FALLBACK_MODEL"]
+            fallback_model = st.secrets["GEMINI"]["FALLBACK_MODEL"]
         except Exception:
             pass
 
