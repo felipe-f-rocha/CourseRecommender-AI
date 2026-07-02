@@ -26,4 +26,4 @@ def get_message(error):
         return 'Falha em acessar as credenciais de modelo.'
 
     else:
-        return 'Ocorreu um erro'
+        return 'Ocorreu um erro!!'
