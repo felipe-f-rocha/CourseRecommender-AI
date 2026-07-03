@@ -5,7 +5,7 @@ def is_empty(area:str):
         return None
     return area
 
-def length(area:str):
+def check_length(area:str):
 
     if len(area) < 2 or len(area) > 80:
         return None
@@ -17,7 +17,7 @@ def check_number(area:str):
         if i.isnumeric():
             nums+=1
 
-    if len(area.strip()) == nums:
+    if len(area.replace(' ', '')) == nums:
         return None
 
     return area
