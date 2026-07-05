@@ -5,13 +5,13 @@ from google.genai import errors
 from time import sleep
 
 
-def recommend(area, level):
+def recommend(area, escolaridade, level):
 
     area = input_validator.validate(area)
 
     api_key, model, fallback_model = secrets.get_secrets()
 
-    prompt = prompt_builder.make_prompt(area, level)
+    prompt = prompt_builder.make_prompt(area, escolaridade, level)
 
     main_client = gemini_client.GeminiClient(api_key, model)
     fallback_client =gemini_client.GeminiClient(api_key, fallback_model)

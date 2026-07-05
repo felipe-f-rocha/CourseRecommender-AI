@@ -1,10 +1,11 @@
-def make_prompt(area, level):
+def make_prompt(area, escolaridade, level):
     # Formação do Prompt base da IA
 
     prompt = (f'''Busque cursos para mim seguindo as seguintes informações:
 
             área = {area},
-            meu nível = {level}
+            minha escolaridade - {escolaridade},
+            nivel do curso desejado = {level}
 
             Se não conseguir seguir, NÃO responda:
 

@@ -1,7 +1,5 @@
 from google.genai.errors import APIError
-
-from config.secrets import ConfigurationError
-from domain.exceptions import ValueNotFound, InvalidInput
+from domain.exceptions import ValueNotFound, InvalidInput, ConfigurationError
 
 def get_message(error):
 
@@ -21,6 +19,8 @@ def get_message(error):
                 return 'Ocorre um erro inesperado. Tente novamente mais tarde'
             case 429:
                 return 'Nosso serviço está indisponivel no momento, Tente novamente mais tarde!!'
+            case _:
+                return 'Houve um erro desconhecido. Tente novamente mais tarde!!'
 
     if isinstance(error, ConfigurationError):
         return 'Falha em acessar as credenciais de modelo.'

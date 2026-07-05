@@ -3,3 +3,6 @@ class ValueNotFound(Exception):
 
 class InvalidInput(Exception):
     pass
+
+class ConfigurationError(Exception):
+    pass

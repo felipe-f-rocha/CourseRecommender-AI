@@ -1,11 +1,7 @@
 import streamlit as st
 import tomllib
 from pathlib import Path
-
-
-class ConfigurationError(Exception):
-    pass
-
+from domain.exceptions import ConfigurationError
 
 def get_secrets():
     api_key = None

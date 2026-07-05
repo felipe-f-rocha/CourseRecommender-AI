@@ -1,6 +1,7 @@
 import streamlit as st
 from services import recommendation_service
 from presentation import error_handler
+
 st.set_page_config(page_title="CourseRecommender AI", layout="centered")
 
 st.title("Descubra cursos ideais para você")
@@ -11,14 +12,26 @@ with st.form(key="infos", clear_on_submit=True, enter_to_submit=False):
     # Input das informações
 
     area = st.text_input("Área de interesse: ", placeholder='Digite sua área de interesse')
-    level = st.number_input(label='Digite o seu nível de 0 a 10: ', min_value=0, max_value=10)
+    escolaridade = st.selectbox(label='Selecione a sua escolaridade: ',
+                         options=("Ensino Fundamental",
+                                  "Ensino Médio",
+                                  "Curso Técnico / Profissionalizante",
+                                  "Graduação",
+                                  "Pós Graduação"
+                                  ))
 
-    # Every form must have a submit button.
+    level = st.selectbox(label='Selecione o nível do curso desejado: ',
+                         options=("Iniciante",
+                                  "Intermediário",
+                                  "Avançado",
+                                  "Profissional"
+                                  ))
+
     submitted = st.form_submit_button("Submit")
 
 if submitted:
     try:
-        cursos = recommendation_service.recommend(area, level)
+        cursos = recommendation_service.recommend(area, escolaridade, level)
     except Exception as e:
         mensagem = error_handler.get_message(e)
         st.error(mensagem)
