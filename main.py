@@ -2,6 +2,16 @@ import streamlit as st
 from services import recommendation_service
 from presentation import error_handler
 
+def show_courses(curso):
+    container = st.container(border=True, horizontal=True, width=700)
+    container.text(curso['Nome do Curso'])
+    container.badge(curso['Plataforma'], color="green")
+    container.text(curso['Por que é ideal'], text_alignment="left")
+    container.caption('É gratuito?\n', text_alignment="left")
+    container.caption(curso['É gratuito'], text_alignment="left")
+    container.link_button("Começar agora", f"{curso['Link']}", type="primary")
+
+
 st.set_page_config(page_title="CourseRecommender AI", layout="centered")
 
 st.title("Descubra cursos ideais para você")
@@ -40,10 +50,4 @@ if submitted:
     else:
         st.write(f'Cursos de {area.title()} para nivel {level}')
         for curso in cursos:
-            container = st.container(border=True, horizontal=True, width=700)
-            container.text(curso['Nome do Curso'])
-            container.badge(curso['Plataforma'], color="green")
-            container.text(curso['Por que é ideal'], text_alignment="left")
-            container.caption('É gratuito?\n', text_alignment="left")
-            container.caption(curso['É gratuito'], text_alignment="left")
-            container.link_button("Começar agora", f"{curso['Link']}", type="primary")
+            show_courses(curso)
