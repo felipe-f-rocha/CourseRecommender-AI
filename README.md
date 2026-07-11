@@ -2,131 +2,100 @@
 
 ![Python](https://img.shields.io/badge/Python-3.11-blue)
 ![Streamlit](https://img.shields.io/badge/Streamlit-App-red)
-![AI](https://img.shields.io/badge/AI-Gemini-green)
+![Gemini](https://img.shields.io/badge/AI-Gemini-green)
 
-> Sistema inteligente de recomendação de cursos usando IA generativa, validação automática de links e arquitetura modular.
+> A Python application that recommends real courses based on interests, education level, and desired course level using Google Gemini AI and automatic link validation.
 
----
+## Overview
 
-## Visão Geral
+CourseRecommender AI is a Streamlit-based web application that helps users find relevant and trustworthy online courses. Based on a few basic inputs, the system sends a prompt to Gemini, receives course suggestions, and validates whether the returned links still work.
 
-O CourseRecommender AI resolve o problema de encontrar cursos confiáveis na internet.
+## Features
 
-Ele usa IA (Google Gemini) para gerar recomendações personalizadas e valida automaticamente os links.
+- Interactive Streamlit form to collect:
+  - area of interest
+  - education level
+  - desired course level
+- Course recommendations generated with the Gemini model
+- Use of Google search grounding to improve response quality
+- Automatic link validation with fallback to a Google search when a link is unavailable
+- Error handling for invalid input, API failures, and configuration issues
 
----
+## How it works
 
-## Como Funciona
+The application flow is straightforward:
 
-Fluxo do sistema:
+1. The user provides their area of interest, education level, and course level.
+2. The service layer builds a prompt for Gemini.
+3. The Gemini client generates course suggestions.
+4. The parser structures the response into a usable format.
+5. Validation checks the links and replaces them with a Google search when needed.
+6. Results are displayed in the Streamlit interface.
 
-````
-Streamlit (UI)  
-↓  
-Service Layer (orquestração)  
-↓  
-Domain Layer (regras e validação)  
-↓  
-Infrastructure Layer (Gemini + requests)  
-↓  
-Resposta formatada e exibida  
-
-````
-
-
----
-
-## Arquitetura
-
-### UI (Streamlit)
-- Entrada de dados
-  - Exibição de resultados
-  - Exibição de erros
-
-### Service Layer
-- Orquestra todo o fluxo
-  - Controla fallback
-  - Gerencia chamadas de IA
-  - Coordena validação e parsing
-
-### Domain Layer
-- Regras de validação
-  - Estrutura de dados (Curso)
-  - Parsing da resposta da IA
-
-### Infrastructure Layer
-- Integração com Gemini API
-  - Requisições HTTP
-  - Validação de URLs
-
-### Config
-- Chaves de API
-  - Modelos Gemini
-  - Fallback settings
-
----
-
-## Funcionalidades
-
-````
-- Validação automática de links
-- Sistema de fallback de modelo
-- Validação paralela de URLs
-- Arquitetura modular
-````
-
-
----
-
-## 🛡 Tratamento de Erros
-
-### Infraestrutura
-- 429 → ativa fallback
-  - 5xx → retry/fallback
-  - 403 → erro de configuração
-
-### UI
-- Mostra erros amigáveis
-  - Não decide lógica de recuperação
-
-### Service
-- Decide fallback
-  - Controla retry
-  - Propaga erros tratados
-
----
-
-## Fallback
-
-### Link
-Se o link estiver quebrado, substitui por busca no Google.
-
----
-
-## Tecnologias
+## Technologies
 
 - Python 3.11+
-  - Google Gemini API
-  - Streamlit
-  - Requests
-  - python-dotenv
-  - ThreadPoolExecutor
+- Streamlit
+- Google Gemini API
+- Requests
+- pytest
 
----
+## Project structure
 
-# Estrutura do Projeto
+- config/: credential loading and access
+- domain/: domain validation and exceptions
+- infrastructure/: Gemini integration, parsing, validation, and prompt building
+- presentation/: user-facing error message handling
+- services/: recommendation orchestration
+- main.py: Streamlit application entry point
+- tests/: automated tests
 
-    config/
-    infra/
-    domain/
-    service/
-    ui/
-    
-    main.py
-    requirements.txt
-    README.md
+## Setup
 
----
-# Licença
+### 1. Create a virtual environment
 
-MIT License
+On Windows:
+
+```powershell
+python -m venv .venv
+.venv\Scripts\activate
+```
+
+### 2. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Configure credentials
+
+Copy the example file and fill in your keys:
+
+```bash
+copy secrets_example.toml secrets.toml
+```
+
+The file should contain:
+
+```toml
+[GEMINI]
+GEMINI_API_KEY="your_api_key"
+GEMINI_MODEL="primary_model"
+FALLBACK_MODEL="secondary_model"
+```
+
+## Running the app
+
+```bash
+streamlit run main.py
+```
+
+## Tests
+
+```bash
+pytest
+```
+
+## License
+
+This project is licensed under the MIT License.
