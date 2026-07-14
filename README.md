@@ -122,7 +122,7 @@ Se o link estiver quebrado, substitui por busca no Google.
     service/
     ui/
     
-    main.py
+    Recommend.py
     requirements.txt
     README.md
 
