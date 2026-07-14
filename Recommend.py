@@ -12,7 +12,7 @@ def show_courses(curso):
     container.link_button("Começar agora", f"{curso['Link']}", type="primary")
 
 
-st.set_page_config(page_title="CourseRecommender AI", layout="centered")
+st.set_page_config(page_title="DEMO Version: CourseRecommender AI", layout="centered")
 
 st.title("Descubra cursos ideais para você")
 

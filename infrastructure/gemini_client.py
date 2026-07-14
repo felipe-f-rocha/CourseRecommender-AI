@@ -11,7 +11,7 @@ class GeminiClient:
             google_search=types.GoogleSearch()
         )
 
-    def search_courses(self, prompt: str):
+    def search_courses(self, prompt: str) -> types.GenerateContentResponse: 
         return self.client.models.generate_content(
             model=self.model,
             contents=prompt,

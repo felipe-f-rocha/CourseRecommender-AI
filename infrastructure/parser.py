@@ -1,4 +1,4 @@
-def parse_cursos(courses):
+def parse_cursos(courses) -> list[dict[str, str]]:
     # Remove caracteres desnecesários e quebra o retorno em linhas
 
     courses = courses.text.replace('*', '').replace('{', '').replace('}', '')
