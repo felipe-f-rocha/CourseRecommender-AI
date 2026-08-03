@@ -47,7 +47,7 @@ The application flow is straightforward:
 - infrastructure/: Gemini integration, parsing, validation, and prompt building
 - presentation/: user-facing error message handling
 - services/: recommendation orchestration
-- main.py: Streamlit application entry point
+- recommend.py: Streamlit application entry point
 - tests/: automated tests
 
     config/
