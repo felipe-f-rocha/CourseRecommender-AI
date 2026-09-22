@@ -1,5 +1,5 @@
 def make_prompt(area:str, escolaridade:str, level:str) -> str:
-    # Formação do Prompt base da IA
+    # Create the AI prompt
 
     prompt = (f'''Busque cursos para mim seguindo as seguintes informações:
 

@@ -8,7 +8,7 @@ def get_secrets():
     model = None
     fallback_model = None
 
-    # 1. tenta arquivo local
+    # 1. Try the local file
     try:
         base_dir = Path(__file__).resolve().parent.parent
         file_path = base_dir / "secrets.toml"
@@ -21,7 +21,7 @@ def get_secrets():
         fallback_model = config["GEMINI"]["FALLBACK_MODEL"]
 
     except (FileNotFoundError, KeyError):
-        pass  # fallback será usado
+        pass  # fallback will be used
 
     # 2. fallback Streamlit
     if not api_key or not model:
@@ -32,14 +32,14 @@ def get_secrets():
         except Exception:
             pass
 
-    # 3. validação final
+    # 3. Final validation
     if not api_key:
-        raise ConfigurationError("GEMINI_API_KEY não configurada")
+        raise ConfigurationError("GEMINI_API_KEY not found")
 
     if not model:
-        raise ConfigurationError("GEMINI_MODEL não configurado")
+        raise ConfigurationError("GEMINI_MODEL not found")
 
     if not fallback_model:
-        raise ConfigurationError("FALLBACK_MODEL não configurado")
+        raise ConfigurationError("FALLBACK_MODEL not found")
 
     return api_key, model, fallback_model

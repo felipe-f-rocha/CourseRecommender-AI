@@ -14,11 +14,11 @@ def validate_courses(courses):
 
 
 def url_validation(headers,courses):
-    # Valida as URLs e as substitui caso não sejam encontradas
+    # Validates URLs and replaces them if they are not found
 
     try:
         r = requests.head(courses["Link"], headers=headers,timeout=2  )
-        # Verifica a URL é funcional
+        # Checks if the URL is functional
         if r.status_code < 400:
             pass
         else:
