@@ -1,5 +1,5 @@
 def parse_cursos(courses) -> list[dict[str, str]]:
-    # Remove caracteres desnecesários e quebra o retorno em linhas
+    # Remove unnecessary caracteres and break lines
 
     courses = courses.text.replace('*', '').replace('{', '').replace('}', '')
     formatted_courses = courses.split('\n')
@@ -12,7 +12,7 @@ def parse_cursos(courses) -> list[dict[str, str]]:
     actual_course = {}
     final_courses = []
 
-    # Separa os textos tratados em dicionarios por cursos
+    # Separate the texts treated in dictionaries by courses
 
     for i in formatted_courses:
 
