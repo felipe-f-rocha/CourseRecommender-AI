@@ -14,7 +14,7 @@ def validate_courses(courses):
 
 
 def url_validation(headers,courses):
-    # Validates URLs and replaces them if they are not found
+    # Check if URLs are valid and replaces them if they are not
 
     try:
         r = requests.head(courses["Link"], headers=headers,timeout=2  )

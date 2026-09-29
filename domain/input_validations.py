@@ -10,6 +10,8 @@ def is_empty(area:str) -> str:
 
 def check_length(area:str) -> str:
 
+   # Checks if the input is in the acceptable length
+
     if len(area) < 2:
         raise InvalidInput('Nome de área incompleto')
     elif len(area) > 80:
@@ -18,6 +20,9 @@ def check_length(area:str) -> str:
     return area
 
 def check_number(area:str) -> str:
+
+    # Checks if the input is only composed by numbers
+
     nums = 0
     for i in area:
         if i.isnumeric():

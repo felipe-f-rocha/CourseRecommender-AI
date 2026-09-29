@@ -3,6 +3,8 @@ from domain import input_validations
 
 def validate(area):
 
+    # Orchestrate the input validation
+
     try:
         area = input_validations.is_empty(area)
         area = input_validations.check_length(area)

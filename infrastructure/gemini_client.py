@@ -4,6 +4,9 @@ from google.genai import types
 class GeminiClient:
 
     def __init__(self, api_key: str, model: str):
+
+        # Build the gemini client
+
         self.model = model
         self.client = genai.Client(api_key=api_key)
 
@@ -11,7 +14,10 @@ class GeminiClient:
             google_search=types.GoogleSearch()
         )
 
-    def search_courses(self, prompt: str) -> types.GenerateContentResponse: 
+    def search_courses(self, prompt: str) -> types.GenerateContentResponse:
+
+        # Search for courses
+
         return self.client.models.generate_content(
             model=self.model,
             contents=prompt,
